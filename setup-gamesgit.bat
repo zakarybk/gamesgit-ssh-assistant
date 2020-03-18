@@ -1,5 +1,9 @@
 @echo off
 
+set keygenPath = ""
+set keyscanPath = ""
+set gitPath = ""
+
 if NOT EXIST "C:\Program Files\Git\bin\git.exe" (
 	echo Git is not installed, please install 64-bit Git for Windows Setup
 	echo "https://git-scm.com/download/win"
@@ -9,6 +13,61 @@ if NOT EXIST "C:\Program Files\Git\bin\git.exe" (
 	exit /b
 )
 
+:: Check for git PATH - above verifies if git.exe exists
+where git > temp.txt
+
+if %ERRORLEVEL% EQU 0 (
+	set /p gitPath=< temp.txt
+) else (
+	set gitPath=C:\Program Files\Git\bin\git.exe
+	echo WARNING git is not set on the PATH!
+)
+
+:: Check for keyscan PATH
+where ssh-keyscan > temp.txt
+
+if %ERRORLEVEL% EQU 0 (
+	set /p keyscanPath=< temp.txt
+) else (
+	set keyscanPath=C:\Program Files\Git\usr\bin\ssh-keyscan.exe
+)
+
+if NOT EXIST "%keyscanPath%" (
+	echo ssh-keyscan not found on PATH or installation directory!
+	echo Make sure it was installed with https://git-scm.com/download/win
+	del temp.txt
+	pause
+	exit
+)
+
+:: Check for keygen PATH
+where ssh-keygen > temp.txt
+
+if %ERRORLEVEL% EQU 0 (
+	set /p keygenPath=< temp.txt
+) else (
+	set keygenPath=C:\Program Files\Git\usr\bin\ssh-keygen.exe
+)
+
+if NOT EXIST "%keygenPath%" (
+	echo ssh-keygen not found on PATH or installation directory!
+	echo Make sure it was installed with https://git-scm.com/download/win
+	del temp.txt
+	pause
+	exit
+)
+
+:: Creating startup for allow Tortoise git etc to use SSH keys
+if NOT EXIST "C:\Users\Zak\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\ssh.bat" (
+	echo setx HOME ^%UserProfile^% >> "C:\Users\Zak\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\ssh.bat"
+	echo setx GIT_SSH=C:\Program Files\Git\usr\bin\ssh.exe >> "C:\Users\Zak\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\ssh.bat"
+	echo CALL "C:\Program Files\Git\cmd\start-ssh-agent.cmd" >> "C:\Users\Zak\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\ssh.bat"
+	echo SETX SSH_AUTH_SOCK "%SSH_AUTH_SOCK%" >> "C:\Users\Zak\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\ssh.bat"
+	echo SETX SSH_AGENT_PID "%SSH_AGENT_PID%" >> "C:\Users\Zak\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\ssh.bat"
+	echo exit >> "C:\Users\Zak\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\ssh.bat"
+)
+
+:: Check for VPN connection
 ping gamesgit.falmouth.ac.uk -n 1 -4 | find /i "TTL=">nul
 if %ERRORLEVEL% EQU 1 (
 	echo Cannot reach gamesgit.falmouth.ac.uk, are you on the VPN?
@@ -33,10 +92,10 @@ type NUL >> "%UserProfile%\.ssh\config"
 
 :: Add to known hosts
 echo Checking if GamesGit has been added to SSH hosts
-call ssh-keygen -F gamesgit.falmouth.ac.uk
+call "%keygenPath%" -F gamesgit.falmouth.ac.uk
 echo %errorlevel%
 if %ERRORLEVEL% EQU 1 (
-	ssh-keyscan gamesgit.falmouth.ac.uk >> "%UserProfile%\.ssh\known_hosts
+	%keyscanPath% gamesgit.falmouth.ac.uk >> "%UserProfile%\.ssh\known_hosts
 	echo Adding GamesGit to SSH hosts
 ) else (
 	echo Found GamesGit in SSH hosts so skipping
@@ -47,7 +106,7 @@ echo Checking if SSH key pair exists
 if NOT EXIST "%UserProfile%\.ssh\gamesgit" (
 	:: gamesgit gamesgit.pub
 	echo Generating new SSH key pair
-	ssh-keygen -N "" -t rsa -f "%UserProfile%\.ssh\gamesgit
+	"%keygenPath%" -N "" -t rsa -f "%UserProfile%\.ssh\gamesgit
 ) else (
 	echo Found SSH key pair so skipping
 )
@@ -68,8 +127,8 @@ if %ERRORLEVEL% EQU 1 (
 echo Setting up global git config
 
 :: This was checked and gamesgit converts the name to their real name fine with this
-call git config --global user.name %id%
-call git config --global user.email %id%@falmouth.ac.uk
+call "%gitPath%" config --global user.name %id%
+call "%gitPath%" config --global user.email %id%@falmouth.ac.uk
 
 echo Copied SSH public key to clipboard
 set /p mytextfile=< %UserProfile%\.ssh\gamesgit.pub
@@ -79,4 +138,6 @@ echo Opening GamesGit SSH key adding site https://gamesgit.falmouth.ac.uk/plugin
 explorer "https://gamesgit.falmouth.ac.uk/plugins/servlet/ssh/account/keys/add"
 
 echo Finished! (press control + v to paste your key into the website)
+echo Don't forget to change the SSH client in tortoise git/your version control software!
+del temp.txt
 pause
