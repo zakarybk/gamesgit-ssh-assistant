@@ -5,7 +5,7 @@ This has been tested on Windows 10 ONLY.
 It's likely to work on 7/8 as well.
 
 ## Requirements
-* Git including ssh-keygen, ssh-keyscan which come included in the installer at https://git-scm.com/download/win
+* Git including ssh-keygen, ssh-keyscan which come included in the installer at https://git-scm.com/download/win - Download *64-bit Git for Windows Setup* or this guide may not work since the 32bit version will be installed elsewhere.
 
 ## What you don't need - infact this setup will stop the below from working with version control
 * Putty
