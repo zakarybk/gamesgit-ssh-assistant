@@ -11,6 +11,7 @@ if NOT EXIST "C:\Program Files\Git\bin\git.exe" (
 ping gamesgit.falmouth.ac.uk -n 1 -4 | find /i "TTL=">nul
 if %ERRORLEVEL% EQU 1 (
 	echo Cannot reach gamesgit.falmouth.ac.uk, are you on the VPN?
+	echo Get the VPN at https://learningspace.falmouth.ac.uk/course/view.php?id=3301
 	exit /b
 )
 
