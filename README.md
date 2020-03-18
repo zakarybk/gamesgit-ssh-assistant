@@ -17,6 +17,7 @@ It's likely to work on 7/8 as well.
 2. Run *setup-gamesgit.bat* and follow the instructions (Your anti-virus maybe triggered as this adds a .bat (ssh.bat) file to Startup apps, you will need to exclude the script in order for the setup to be successful)
 3. Change the SSH client in your version control software to C:\Program Files\Git\usr\bin\ssh.exe - example uses TortoiseGit
 ![tortoise](docs/img/doc-change-ssh.jpg)
+4. Once that's setup, clone using ssh. No need to touch it again since it will work through restarts.
 
 If you need to add more SSH keys such as for GitHub then go to C:\Users\USERNAME\\.ssh and open *config*.
 Below is an example of one I added for GitHub (add new lines after the one for games git)
