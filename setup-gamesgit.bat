@@ -14,7 +14,13 @@ if %ERRORLEVEL% EQU 1 (
 	exit /b
 )
 
+:GetUsername
 set /p id="Enter University Username (example: AB112233): "
+echo Is "%id%" correct and contain no spaces?
+echo This would make your email %id%@falmouth.ac.uk, does that look right?
+
+set /p confirmed="y/n: "
+if NOT "%confirmed%" == "y" GOTO GetUsername
 
 :: Initalise dir + files
 echo File and directory initialisation
@@ -66,9 +72,9 @@ echo Copied SSH public key to clipboard
 set /p mytextfile=< %UserProfile%\.ssh\gamesgit.pub
 echo|set/p=%mytextfile%|clip
 
-echo Opening GamesGit SSH key adding site
+echo Opening GamesGit SSH key adding site https://gamesgit.falmouth.ac.uk/plugins/servlet/ssh/account/keys/add
 
 explorer "https://gamesgit.falmouth.ac.uk/plugins/servlet/ssh/account/keys/add"
 
 
-echo Finished!
+echo Finished! (press control + v to paste your key into the website)
