@@ -5,6 +5,7 @@ if NOT EXIST "C:\Program Files\Git\bin\git.exe" (
 	echo "https://git-scm.com/download/win"
 	echo After installing git close and open the console so this can find git
 	explorer "https://git-scm.com/download/win"
+	pause
 	exit /b
 )
 
@@ -12,6 +13,7 @@ ping gamesgit.falmouth.ac.uk -n 1 -4 | find /i "TTL=">nul
 if %ERRORLEVEL% EQU 1 (
 	echo Cannot reach gamesgit.falmouth.ac.uk, are you on the VPN?
 	echo Get the VPN at https://learningspace.falmouth.ac.uk/course/view.php?id=3301
+	pause
 	exit /b
 )
 
@@ -74,8 +76,7 @@ set /p mytextfile=< %UserProfile%\.ssh\gamesgit.pub
 echo|set/p=%mytextfile%|clip
 
 echo Opening GamesGit SSH key adding site https://gamesgit.falmouth.ac.uk/plugins/servlet/ssh/account/keys/add
-
 explorer "https://gamesgit.falmouth.ac.uk/plugins/servlet/ssh/account/keys/add"
 
-
 echo Finished! (press control + v to paste your key into the website)
+pause
