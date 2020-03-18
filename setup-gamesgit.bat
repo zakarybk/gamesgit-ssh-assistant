@@ -25,7 +25,7 @@ if NOT "%confirmed%" == "y" GOTO GetUsername
 
 :: Initalise dir + files
 echo File and directory initialisation
-mkdir -p %UserProfile%\.ssh
+mkdir %UserProfile%\.ssh
 type NUL >> "%UserProfile%\.ssh\known_hosts"
 type NUL >> "%UserProfile%\.ssh\config"
 
