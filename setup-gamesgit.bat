@@ -112,7 +112,7 @@ echo Checking if SSH key pair exists
 if NOT EXIST "%UserProfile%\.ssh\gamesgit" (
 	:: gamesgit gamesgit.pub
 	echo Generating new SSH key pair
-	"%keygenPath%" -N "" -t rsa -f "%UserProfile%\.ssh\gamesgit
+	"%keygenPath%" -N "" -t rsa -f "%UserProfile%\.ssh\gamesgit"
 ) else (
 	echo Found SSH key pair so skipping
 )
@@ -123,9 +123,9 @@ FINDSTR "gamesgit.falmouth.ac.uk" "%UserProfile%\.ssh\config"
 echo %errorlevel%
 if %ERRORLEVEL% EQU 1 (
 	echo Adding SSH key to config
-	echo Host gamesgit.falmouth.ac.uk >> %UserProfile%\.ssh\config
-	echo IdentityFile %UserProfile%\.ssh\gamesgit >> %UserProfile%\.ssh\config
-	echo User %id%@falmouth.ac.uk >> %UserProfile%\.ssh\config
+	echo Host gamesgit.falmouth.ac.uk >> "%UserProfile%\.ssh\config"
+	echo IdentityFile %UserProfile%\.ssh\gamesgit >> "%UserProfile%\.ssh\config"
+	echo User %id%@falmouth.ac.uk >> "%UserProfile%\.ssh\config"
 ) else (
 	echo Found SSH key in config
 )
@@ -137,7 +137,7 @@ call "%gitPath%" config --global user.name %id%
 call "%gitPath%" config --global user.email %id%@falmouth.ac.uk
 
 echo Copied SSH public key to clipboard
-set /p mytextfile=< %UserProfile%\.ssh\gamesgit.pub
+set /p mytextfile=< "%UserProfile%\.ssh\gamesgit.pub"
 echo|set/p=%mytextfile%|clip
 
 echo Opening GamesGit SSH key adding site https://gamesgit.falmouth.ac.uk/plugins/servlet/ssh/account/keys/add
