@@ -65,6 +65,12 @@ if NOT EXIST "%UserProfile%\AppData\Roaming\Microsoft\Windows\Start Menu\Program
 	echo SETX SSH_AUTH_SOCK "%SSH_AUTH_SOCK%" >> "%UserProfile%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\ssh.bat"
 	echo SETX SSH_AGENT_PID "%SSH_AGENT_PID%" >> "%UserProfile%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\ssh.bat"
 	echo exit >> "%UserProfile%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\ssh.bat"
+	
+	setx HOME "%UserProfile%"
+	setx GIT_SSH "C:\Program Files\Git\usr\bin\ssh.exe"
+	CALL "C:\Program Files\Git\cmd\start-ssh-agent.cmd"
+	SETX SSH_AUTH_SOCK "%SSH_AUTH_SOCK%"
+	SETX SSH_AGENT_PID "%SSH_AGENT_PID%"
 )
 
 :: Check for VPN connection
