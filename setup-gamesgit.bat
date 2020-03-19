@@ -59,8 +59,8 @@ if NOT EXIST "%keygenPath%" (
 
 :: Creating startup for allow Tortoise git etc to use SSH keys
 if NOT EXIST "%UserProfile%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\ssh.bat" (
-	echo setx HOME=%UserProfile% >> "%UserProfile%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\ssh.bat"
-	echo setx GIT_SSH=C:\Program Files\Git\usr\bin\ssh.exe >> "%UserProfile%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\ssh.bat"
+	echo setx HOME "%UserProfile%" >> "%UserProfile%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\ssh.bat"
+	echo setx GIT_SSH "C:\Program Files\Git\usr\bin\ssh.exe" >> "%UserProfile%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\ssh.bat"
 	echo CALL "C:\Program Files\Git\cmd\start-ssh-agent.cmd" >> "%UserProfile%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\ssh.bat"
 	echo SETX SSH_AUTH_SOCK "%SSH_AUTH_SOCK%" >> "%UserProfile%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\ssh.bat"
 	echo SETX SSH_AGENT_PID "%SSH_AGENT_PID%" >> "%UserProfile%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\ssh.bat"
